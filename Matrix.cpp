@@ -36,6 +36,62 @@ Matrix::Matrix(int rows, int cols) : data_(nullptr), rows_(rows), cols_(cols) {
     }
 }
 
+// Конструктор копирования (глубокое копирование)
+Matrix::Matrix(const Matrix& other) : data_(nullptr), rows_(other.rows_), cols_(other.cols_) {
+    if (rows_ == 0 || cols_ == 0 || other.data_ == nullptr) {
+        rows_ = 0;
+        cols_ = 0;
+        return;
+    }
+
+    data_ = new int*[rows_];
+    for (int i = 0; i < rows_; ++i) {
+        data_[i] = new int[cols_];
+        for (int j = 0; j < cols_; ++j) {
+            data_[i][j] = other.data_[i][j];
+        }
+    }
+}
+
+// Оператор присваивания
+Matrix& Matrix::operator=(const Matrix& other) {
+    // 1. Защита от самоприсваивания
+    if (this == &other) {
+        return *this;
+    }
+
+    // 2. Освобождение старой памяти
+    if (data_ != nullptr) {
+        for (int i = 0; i < rows_; ++i) {
+            delete[] data_[i];
+        }
+        delete[] data_;
+        data_ = nullptr;
+    }
+
+    // 3. Копирование размеров
+    rows_ = other.rows_;
+    cols_ = other.cols_;
+
+    // Если other пустая — оставляем объект пустым
+    if (rows_ == 0 || cols_ == 0 || other.data_ == nullptr) {
+        rows_ = 0;
+        cols_ = 0;
+        return *this;
+    }
+
+    // 4. Выделение новой памяти и копирование значений
+    data_ = new int*[rows_];
+    for (int i = 0; i < rows_; ++i) {
+        data_[i] = new int[cols_];
+        for (int j = 0; j < cols_; ++j) {
+            data_[i][j] = other.data_[i][j];
+        }
+    }
+
+    return *this;
+}
+
 Matrix::~Matrix() {
     if (data_ == nullptr) return;
     for (int i = 0; i < rows_; ++i) {

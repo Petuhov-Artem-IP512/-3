@@ -6,52 +6,45 @@
 int main() {
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
-    std::cout << "=== 1. Создание матриц разными конструкторами ===\n";
-    Matrix m1;        
-    Matrix m2(3);    
-    Matrix m3(3, 4);  
-    Matrix m4(2, 3);  
+    // 1. Создать матрицу a (3, 4), заполнить, вывести
+    Matrix a(3, 4);
+    a.fillRandom();
+    std::cout << "Matrix a:\n";
+    a.print();
 
-    std::cout << "\n=== 2. Вывод M2, M3, M4 ===\n";
-    std::cout << "M2 (единичная 3x3):\n";
-    m2.print();
-    std::cout << "M3 (3x4 нули):\n";
-    m3.print();
-    std::cout << "M4 (2x3 нули):\n";
-    m4.print();
+    // 2. Копирование через конструктор копирования
+    Matrix b = a;
 
-    std::cout << "\n=== 3. Заполнение M2 по формуле i * j ===\n";
-    for (int i = 0; i < m2.getRows(); ++i) {
-        for (int j = 0; j < m2.getCols(); ++j) {
-            m2.set(i, j, i * j);
-        }
-    }
-    m2.print();
+    // 3. Изменить b и убедиться, что a не изменилась
+    b.set(0, 0, 999);
+    std::cout << "\nAfter b.set(0, 0, 999):\n";
+    std::cout << "Matrix a:\n";
+    a.print();
+    std::cout << "Matrix b:\n";
+    b.print();
 
-    std::cout << "\n=== 4. Заполнение M3 случайными числами ===\n";
-    m3.fillRandom();
-    m3.print();
+    // 4. Создать c (2, 2), заполнить, присвоить a
+    Matrix c(2, 2);
+    c.fillRandom();
+    c = a;
 
-    std::cout << "\n=== 5. Заполнение M4 с клавиатуры ===\n";
-    m4.inputFromKeyboard();
-    m4.print();
+    // 5. Вывести c (должна быть копия a)
+    std::cout << "\nMatrix c after c = a:\n";
+    c.print();
 
-    std::cout << "\n=== 6. Подсчет суммы элементов M3 ===\n";
-    std::cout << "Сумма элементов M3: " << m3.sum() << "\n";
+    // 6. Цепочка присваиваний
+    Matrix d, e;
+    d = e = a;
+    std::cout << "\nMatrix d:\n";
+    d.print();
+    std::cout << "Matrix e:\n";
+    e.print();
 
-    std::cout << "\n=== 7. Демонстрация работы исключений ===\n";
-    try {
-        Matrix bad(-1, 5);
-    } catch (const std::invalid_argument& e) {
-        std::cout << "Caught: " << e.what() << '\n';
-    }
-
-    try {
-        m3.get(100, 100);
-    } catch (const std::out_of_range& e) {
-        std::cout << "Caught: " << e.what() << '\n';
-    }
+    // 7. Самоприсваивание
+    a = a;
+    std::cout << "\nMatrix a after a = a:\n";
+    a.print();
+    std::cout << "(should be unchanged)\n";
 
     return 0;
 }
-

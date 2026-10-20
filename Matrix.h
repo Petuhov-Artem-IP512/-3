@@ -8,14 +8,17 @@ public:
     explicit Matrix(int size);
     Matrix(int rows, int cols);
 
-    // Деструктор
+    Matrix(const Matrix& other);
+    Matrix& operator=(const Matrix& other);
+
+
     ~Matrix();
 
     // Доступ к элементам
     int get(int i, int j) const;
     void set(int i, int j, int value);
 
-    // Заполнение и вывод
+
     void inputFromKeyboard();
     void fillRandom();
     void print() const;
